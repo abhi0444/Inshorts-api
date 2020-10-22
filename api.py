@@ -20,11 +20,11 @@ from requests.exceptions import HTTPError
 URL = "https://inshorts.com/en/read"
 """
 # To improve 
-    1. extract image                              ~~~~~~~
-    2. comments				                      ~~~~~~~
-    3. list comprehension			              no need now
+    1. extract image                              
+    2. comments				                      
+    3. list comprehension			              
     4. dictionary instead of News class
-    5. Improve returns of fetch_all		          standardized but need improvement
+    5. Improve returns of fetch_all		          
     6. 
 """
 
