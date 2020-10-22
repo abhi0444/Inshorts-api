@@ -223,4 +223,3 @@ all_data = fetch_all()
 
 print(all_data)
 """
-print(fetch_category("business"))
