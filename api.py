@@ -83,7 +83,7 @@ class News:
         return f"{self.news}, {self.headline}, {self.image_url}, {self.read_more}"
 
 
-# This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
+# This function will return news from any and every valid url of inshorts that has been passed to it or it will fetch the top news that made it to homepage of inshorts
 # The return for this function should be returning an array that contains all the necessary items that the news has
 """
 1. Image URL (if any) 
