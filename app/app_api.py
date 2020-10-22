@@ -1,20 +1,21 @@
-'''
+"""
 A lot to be done here.
 1. Template for the start
 2. Start page
 3. Electron for making it an app
-'''
+"""
 
-from flask import Flask, request, url_for, render_template
+from flask import Flask
 import api
 
 app = Flask(__name__)
-app.secret_key = b"vjfubvnwiojbtg[[;[;wfhweufiwubke"
+app.secret_key = "vjfubvnwiojbtg[[;[;wfhweufiwubke"
+
 
 @app.route("/home")
 @app.route("/")
 def index():
-    return f"Welcome to News and Weather app"
+    return "Welcome to News and Weather app"
 
 
 @app.route("/news")
@@ -29,4 +30,3 @@ def news(category):
 
 if __name__ == "__main__":
     app.run()
-

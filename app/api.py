@@ -2,7 +2,7 @@
 The following api pulls the news from Inshorts and returns it as a dictionary.
 The dicitionary then can be used as per the need of the program. The functionality
 is achieved by scraping the data from the website. Anyone using this API should first
-obtain all the necessary permission from Inshorts before scraping the data and using 
+obtain all the necessary permission from Inshorts before scraping the data and using
 it for any commercial purpose.
 
 
@@ -15,10 +15,9 @@ It contains two functions:
     1. fetch_all(url, category)
     2. fetch_category(category)
 """
-
+import json
 import requests
 import bs4 as BeautifulSoup
-import json
 from requests.exceptions import HTTPError
 
 # URL for Inshorts {Basically the place from where all teh news is being fetched from}
@@ -41,20 +40,25 @@ CATEGORIES = [
     "automobile",
 ]
 
-# Function to extract URL for images
-# Any given image_url_data is of the form = background-image: url('https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2020/10_oct/21_wed/img_1603300338355_948.jpg?')
-# Thus the part background-image: url(' from the start and ?') from the end should be removed
 def extract_image_url(image_url_data):
+    '''
+    Function to extract URL for images
+    Any given image_url_data is of the form =
+    background-image: url('https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2020/10_oct/21_wed/img_1603300338355_948.jpg?')
+    Thus the part background-image: url(' from the start and ?') from the end should be removed
+    '''
     return image_url_data[
         23 : len(image_url_data) - 3
     ]  # Return the final output string
 
 
-# Not all news has read more thus it must be detected before hand to avoid errors
-# For this function a bs4.tag.elemnt is passed as an argument
-# It reutrns an empty string if there is no URL for readmore
-# Else it return the URL for readmore
 def detect_read_more(bs4tag):
+    '''
+    Not all news has read more thus it must be detected before hand to avoid errors
+    For this function a bs4.tag.elemnt is passed as an argument
+    It reutrns an empty string if there is no URL for readmore
+    Else it return the URL for readmore
+    '''
     read_more_url = ""
     if bs4tag is not None:
         read_more_url = bs4tag["href"]
@@ -62,53 +66,36 @@ def detect_read_more(bs4tag):
 
 
 # Define a class or say a JSON wherein the data about the news fetched from the server will be filled this will be common and standardized througout the app
-"""
-class News:
-    def __init__(
-        self, image_url, news, headline, read_more, error=""
-    ):  # Basic definition for a class to store all the data regarding a news (Constructor)
-        self.image_url = image_url
-        self.news = news
-        self.headline = headline
-        self.read_more = read_more
-        self.error = error
-
-    def __repr__(self):  # Defines how to print
-
-        if self.error != "":
-            return f"{self.error}"
-
-        return f"{self.news}, {self.headline}, {self.image_url}, {self.read_more}"
-"""
 # Since having a class limits the working of this API thus we need to improve this and for that a Dictionary is better
-News = {"status": "", "category": "", "data": []}
-"""
-data variable is a list of dictionaries each element contains the following information
-{
-    headline: '',
-    article: '',
-    read_more: '',
-    image_url: ''
-}
-"""
+NEWS = {"status": "", "category": "", "data": []}
+
+# data variable is a list of dictionaries each element contains the following information
+# {
+#    headline: '',
+#    article: '',
+#    read_more: '',
+#    image_url: ''
+# }
+
 
 
 def fetch_all(some_url=URL, category=""):
     """
-    This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
-    The return for this function should be returning an array that contains all the necessary items that the news has
+    This function will contain news from any and every valid url that
+    has been passed to it or it will fetch the top news that made it to homepage
+    The return for this function should be returning an array that contains
+    all the necessary items that the news has
 
-    1. Image URL (if any) 
+    1. Image URL (if any)
     2. News data (the actual news)
     3. Read more URL (if any)
     4. Headline (Not the complete data but the only the headline)
     """
     try:
         response = requests.get(some_url, timeout=5, allow_redirects=True)
-
         soup = BeautifulSoup.BeautifulSoup(response.text, "html.parser")
 
-        """
+        '''
         Any given news article is of the given sample form
         <div class="">
             <div class="news-card z-depth-1" itemscope itemtype="http://schema.org/NewsArticle">
@@ -138,24 +125,24 @@ def fetch_all(some_url=URL, category=""):
                     <span itemprop="headline">Maharashtra govt blocks CBI from probing cases in state without consent</span>
                     </a>
                     <div class="news-card-author-time news-card-author-time-in-title">
-                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> / 
+                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> /
                     <span class="time" itemprop="datePublished" content="2020-10-21T17:13:33.000Z">10:43 pm</span> on <span clas="date">21 Oct 2020,Wednesday</span>
                     </div>
                 </div>
                 <div class="news-card-content news-right-box">
                     <div itemprop="articleBody">The Maharashtra government has withdrawn the general consent extended to CBI to probe cases in the state. CBI will now have to approach the state government for permission to carry out an investigation on a case by case basis. This comes a day after CBI registered an FIR in the TRP scam case based on a complaint filed in UP.</div>
                     <div class="news-card-author-time news-card-author-time-in-content">
-                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> / 
+                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> /
                     <span class="time" itemprop="dateModified" content="2020-10-21T17:13:33.000Z" >10:43 pm</span> on <span class="date">21 Oct</span>
                     </div>
                 </div>
                 <div class="news-card-footer news-right-box">
                 <div class="read-more">read more at <a class="source" onclick="ga('send', {'hitType': 'event', 'eventCategory': 'ReadMore', 'eventAction': 'clicked', 'eventLabel': 'vedantu.com' });" target="_blank" href="https://inshorts.com/safe_redirect?url=https%3A%2F%2Fvedantu.app.link%2Fg9mIAb41Kab&amp;inshorts_open_externally=true ">vedantu.com</a></div>
                 </div>
-            </div>        
+            </div>
         </div>
 
-        From here it is evident that 
+        From here it is evident that
             1. div itemprop = "articleBody" contains the data about the news that is basically the article itself.
             2. span itemprop = "headline" contains the data about the headline of the news.
             3. div class = "news-card-image" contains the data about the URL of the image associated with the news.
@@ -164,15 +151,13 @@ def fetch_all(some_url=URL, category=""):
 
         This can be done by searching for div class "news-card z-depth-1" which will reutrn an array containing all the news with all the associated data that is image, headline and article.
         We then iterate over this array and extract the data from each element and store it
-        """
-        
+        '''
+
         all_news_cards = soup.find_all("div", class_="news-card z-depth-1")
 
-        '''
-        So for any given app using this the items would keed on appending in the News dictionary
-        thus it has been cleared on every call else the dictionary would have ben getting bigger
-        and bigger and also the items displayed on top would have just been the old ones.
-        '''
+        # So for any given app using this the items would keed on appending in the News dictionary
+        # thus it has been cleared on every call else the dictionary would have ben getting bigger
+        # and bigger and also the items displayed on top would have just been the old ones.
 
         News = {"status": "", "category": "", "data": []}
 
@@ -199,21 +184,16 @@ def fetch_all(some_url=URL, category=""):
 
         return json.dumps(News, indent=4)  # Final return for the News
 
-    except HTTPError as e:  # Return some error in case of an error
-        News["status"] = e
-        return json.dumps(News, indent=4)
-
-    except Exception as err:
-        News["status"] = err
-        return json.dumps(News, indent=4)
-
+    except HTTPError as err:  # Return some error in case of an error
+        NEWS["status"] = err
+        return json.dumps(NEWS, indent=4)
 
 def fetch_category(category):
     """
     This function will get the news from a specific category that the user wants to see
     This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
     The return for this function should be returning an array that contains all the necessary items that the news has
-    1. Image URL (if any) 
+    1. Image URL (if any)
     2. News data (the actual news)
     3. Read more URL (if any)
     4. Headline (Not the complete data but the only the headline)
@@ -222,17 +202,9 @@ def fetch_category(category):
         if category not in CATEGORIES:
             raise Exception("Invalid Category")
 
-        modifiedURL = URL + "/" + category
-        return fetch_all(modifiedURL, category)
+        modified_url = URL + "/" + category
+        return fetch_all(modified_url, category)
 
     except Exception as err:
-        News["status"] = err
-        return json.dumps(News, indent=4)
-
-
-# This stuff is just for testing
-"""
-all_data = fetch_all()
-
-print(all_data)
-"""
+        NEWS["status"] = err
+        return json.dumps(NEWS, indent=4)
