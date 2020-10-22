@@ -10,6 +10,10 @@ Also the following API is completely dependant on the HTML structure of the webs
 thus any change to that will cause this API to fail (A sample for current structure
 is given below thus if using this API one must make sure that the HTML structure for
 the time is same on which this was dsigned).
+
+It contains two functions:
+    1. fetch_all(url, category)
+    2. fetch_category(category)
 """
 
 import requests
@@ -87,17 +91,18 @@ data variable is a list of dictionaries each element contains the following info
     image_url: ''
 }
 """
-# This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
-# The return for this function should be returning an array that contains all the necessary items that the news has
-"""
-1. Image URL (if any) 
-2. News data (the actual news)
-3. Read more URL (if any)
-4. Headline (Not the complete data but the only the headline)
-"""
 
 
 def fetch_all(some_url=URL, category=""):
+    """
+    This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
+    The return for this function should be returning an array that contains all the necessary items that the news has
+
+    1. Image URL (if any) 
+    2. News data (the actual news)
+    3. Read more URL (if any)
+    4. Headline (Not the complete data but the only the headline)
+    """
     try:
         response = requests.get(some_url, timeout=5, allow_redirects=True)
 
@@ -160,7 +165,16 @@ def fetch_all(some_url=URL, category=""):
         This can be done by searching for div class "news-card z-depth-1" which will reutrn an array containing all the news with all the associated data that is image, headline and article.
         We then iterate over this array and extract the data from each element and store it
         """
+        
         all_news_cards = soup.find_all("div", class_="news-card z-depth-1")
+
+        '''
+        So for any given app using this the items would keed on appending in the News dictionary
+        thus it has been cleared on every call else the dictionary would have ben getting bigger
+        and bigger and also the items displayed on top would have just been the old ones.
+        '''
+
+        News = {"status": "", "category": "", "data": []}
 
         for news_card in all_news_cards:
             soup = BeautifulSoup.BeautifulSoup(str(news_card), "lxml")
@@ -182,6 +196,7 @@ def fetch_all(some_url=URL, category=""):
             News["category"] = category
             News["data"].append(data_item)
             News["status"] = "sucess"
+
         return json.dumps(News, indent=4)  # Final return for the News
 
     except HTTPError as e:  # Return some error in case of an error
@@ -193,18 +208,16 @@ def fetch_all(some_url=URL, category=""):
         return json.dumps(News, indent=4)
 
 
-# This function will get the news from a specific category that the user wants to see
-# This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
-# The return for this function should be returning an array that contains all the necessary items that the news has
-"""
-1. Image URL (if any) 
-2. News data (the actual news)
-3. Read more URL (if any)
-4. Headline (Not the complete data but the only the headline)
-"""
-
-
 def fetch_category(category):
+    """
+    This function will get the news from a specific category that the user wants to see
+    This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
+    The return for this function should be returning an array that contains all the necessary items that the news has
+    1. Image URL (if any) 
+    2. News data (the actual news)
+    3. Read more URL (if any)
+    4. Headline (Not the complete data but the only the headline)
+    """
     try:
         if category not in CATEGORIES:
             raise Exception("Invalid Category")
