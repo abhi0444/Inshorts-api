@@ -58,7 +58,7 @@ def detect_read_more(bs4tag):
 
 
 # Define a class or say a JSON wherein the data about the news fetched from the server will be filled this will be common and standardized througout the app
-'''
+"""
 class News:
     def __init__(
         self, image_url, news, headline, read_more, error=""
@@ -75,14 +75,10 @@ class News:
             return f"{self.error}"
 
         return f"{self.news}, {self.headline}, {self.image_url}, {self.read_more}"
-'''
+"""
 # Since having a class limits the working of this API thus we need to improve this and for that a Dictionary is better
-News = {
-    "status": '',
-    "category": '',
-    "data": []
-}
-'''
+News = {"status": "", "category": "", "data": []}
+"""
 data variable is a list of dictionaries each element contains the following information
 {
     headline: '',
@@ -90,7 +86,7 @@ data variable is a list of dictionaries each element contains the following info
     read_more: '',
     image_url: ''
 }
-'''
+"""
 # This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
 # The return for this function should be returning an array that contains all the necessary items that the news has
 """
@@ -181,18 +177,24 @@ def fetch_all(some_url=URL, category=""):
                 image_url_div["style"]
             )  # Then extract data from the attributes
             read_more_url = detect_read_more(soup.find("a", class_="source"))
-            data_item = {"headline": headline, "article": article, "read_more": read_more_url,"image_url": image_url}
+            data_item = {
+                "headline": headline,
+                "article": article,
+                "read_more": read_more_url,
+                "image_url": image_url,
+            }
             News["data"].append(data_item)
-            News["status"] = 'sucess'
-        return json.dumps(News, indent = 4)  # Final return for the News
+            News["status"] = "sucess"
+        return json.dumps(News, indent=4)  # Final return for the News
 
     except HTTPError as e:  # Return some error in case of an error
         News["status"] = e
-        return json.dumps(News, indent = 4)
+        return json.dumps(News, indent=4)
 
     except Exception as err:
         News["status"] = err
         return json.dumps(News, indent=4)
+
 
 # This function will get the news from a specific category that the user wants to see
 # This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
@@ -215,7 +217,7 @@ def fetch_category(category):
 
     except Exception as err:
         News["status"] = err
-        return json.dumps(News, indent = 4)
+        return json.dumps(News, indent=4)
 
 
 # This stuff is just for testing
