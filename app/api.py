@@ -40,25 +40,26 @@ CATEGORIES = [
     "automobile",
 ]
 
+
 def extract_image_url(image_url_data):
-    '''
+    """
     Function to extract URL for images
     Any given image_url_data is of the form =
     background-image: url('https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2020/10_oct/21_wed/img_1603300338355_948.jpg?')
     Thus the part background-image: url(' from the start and ?') from the end should be removed
-    '''
+    """
     return image_url_data[
         23 : len(image_url_data) - 3
     ]  # Return the final output string
 
 
 def detect_read_more(bs4tag):
-    '''
+    """
     Not all news has read more thus it must be detected before hand to avoid errors
     For this function a bs4.tag.elemnt is passed as an argument
     It reutrns an empty string if there is no URL for readmore
     Else it return the URL for readmore
-    '''
+    """
     read_more_url = ""
     if bs4tag is not None:
         read_more_url = bs4tag["href"]
@@ -78,7 +79,6 @@ NEWS = {"status": "", "category": "", "data": []}
 # }
 
 
-
 def fetch_all(some_url=URL, category=""):
     """
     This function will contain news from any and every valid url that
@@ -95,7 +95,7 @@ def fetch_all(some_url=URL, category=""):
         response = requests.get(some_url, timeout=5, allow_redirects=True)
         soup = BeautifulSoup.BeautifulSoup(response.text, "html.parser")
 
-        '''
+        """
         Any given news article is of the given sample form
         <div class="">
             <div class="news-card z-depth-1" itemscope itemtype="http://schema.org/NewsArticle">
@@ -151,7 +151,7 @@ def fetch_all(some_url=URL, category=""):
 
         This can be done by searching for div class "news-card z-depth-1" which will reutrn an array containing all the news with all the associated data that is image, headline and article.
         We then iterate over this array and extract the data from each element and store it
-        '''
+        """
 
         all_news_cards = soup.find_all("div", class_="news-card z-depth-1")
 
@@ -187,6 +187,7 @@ def fetch_all(some_url=URL, category=""):
     except HTTPError as err:  # Return some error in case of an error
         NEWS["status"] = err
         return json.dumps(NEWS, indent=4)
+
 
 def fetch_category(category):
     """
