@@ -98,10 +98,6 @@ data variable is a list of dictionaries each element contains the following info
 
 
 def fetch_all(some_url=URL, category=""):
-    if category == "":
-        News["category"] = ""
-    else:
-        News["category"] = category
     try:
         response = requests.get(some_url, timeout=5, allow_redirects=True)
 
@@ -183,6 +179,7 @@ def fetch_all(some_url=URL, category=""):
                 "read_more": read_more_url,
                 "image_url": image_url,
             }
+            News["category"] = category
             News["data"].append(data_item)
             News["status"] = "sucess"
         return json.dumps(News, indent=4)  # Final return for the News
@@ -226,3 +223,4 @@ all_data = fetch_all()
 
 print(all_data)
 """
+print(fetch_category("business"))
