@@ -14,22 +14,15 @@ the time is same on which this was dsigned).
 
 import requests
 import bs4 as BeautifulSoup
+import json
 from requests.exceptions import HTTPError
 
 # URL for Inshorts {Basically the place from where all teh news is being fetched from}
 URL = "https://inshorts.com/en/read"
-"""
-# To improve 
-    1. extract image                              ~~~~~~~
-    2. comments				                      ~~~~~~~
-    3. list comprehension			              no need now
-    4. dictionary instead of News class
-    5. Improve returns of fetch_all		          standardized but need improvement
-    6. 
-"""
 
 # A list of all valid categories
 CATEGORIES = [
+    "",
     "national",
     "business",
     "sports",
@@ -65,6 +58,7 @@ def detect_read_more(bs4tag):
 
 
 # Define a class or say a JSON wherein the data about the news fetched from the server will be filled this will be common and standardized througout the app
+'''
 class News:
     def __init__(
         self, image_url, news, headline, read_more, error=""
@@ -81,8 +75,22 @@ class News:
             return f"{self.error}"
 
         return f"{self.news}, {self.headline}, {self.image_url}, {self.read_more}"
-
-
+'''
+# Since having a class limits the working of this API thus we need to improve this and for that a Dictionary is better
+News = {
+    "status": '',
+    "category": '',
+    "data": []
+}
+'''
+data variable is a list of dictionaries each element contains the following information
+{
+    headline: '',
+    article: '',
+    read_more: '',
+    image_url: ''
+}
+'''
 # This function will contain news from any and every valid url that has been passed to it or it will fetch the top news that made it to homepage
 # The return for this function should be returning an array that contains all the necessary items that the news has
 """
@@ -93,8 +101,11 @@ class News:
 """
 
 
-def fetch_all(some_url=URL):
-    final_data = []
+def fetch_all(some_url=URL, category=""):
+    if category == "":
+        News["category"] = ""
+    else:
+        News["category"] = category
     try:
         response = requests.get(some_url, timeout=5, allow_redirects=True)
 
@@ -170,21 +181,18 @@ def fetch_all(some_url=URL):
                 image_url_div["style"]
             )  # Then extract data from the attributes
             read_more_url = detect_read_more(soup.find("a", class_="source"))
-
-            final_data.append(
-                News(image_url, article, headline, read_more_url)
-            )  # Use a dictionary instead of this class
-
-        return final_data  # Final return for the News
+            data_item = {"headline": headline, "article": article, "read_more": read_more_url,"image_url": image_url}
+            News["data"].append(data_item)
+            News["status"] = 'sucess'
+        return json.dumps(News, indent = 4)  # Final return for the News
 
     except HTTPError as e:  # Return some error in case of an error
-        return News("", "", "", f"HTTP error occurred: {e}")
+        News["status"] = e
+        return json.dumps(News, indent = 4)
 
     except Exception as err:
-        return News(
-            "", "", "", f"Other error occurred: {err}"
-        )  # Python 3.6 error handling
-
+        News["status"] = err
+        return json.dumps(News, indent=4)
 
 # This function will get the news from a specific category that the user wants to see
 # This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
@@ -203,10 +211,11 @@ def fetch_category(category):
             raise Exception("Invalid Category")
 
         modifiedURL = URL + "/" + category
-        return fetch_all(modifiedURL)
+        return fetch_all(modifiedURL, category)
 
     except Exception as err:
-        return News("", "", "", f"Other error occurred: {err}")
+        News["status"] = err
+        return json.dumps(News, indent = 4)
 
 
 # This stuff is just for testing
@@ -215,3 +224,4 @@ all_data = fetch_all()
 
 print(all_data)
 """
+print(fetch_all())
