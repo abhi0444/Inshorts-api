@@ -21,6 +21,10 @@ import bs4 as BeautifulSoup
 from requests.exceptions import HTTPError
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    ElementNotInteractableException,
+)
 
 chromeOptions = Options()
 chromeOptions.headless = True
@@ -109,10 +113,15 @@ def fetch_all(category="", depth=0):
         driver.get(url)
 
         while depth != 0:
-            load_more_button = driver.find_element_by_id("load-more-btn")
-            load_more_button.click()
-            time.sleep(1.5)
-            depth = depth - 1
+            try:
+                load_more_button = driver.find_element_by_id("load-more-btn")
+                time.sleep(1.3)
+                load_more_button.click()
+                depth = depth - 1
+            except NoSuchElementException as err:
+                break
+            except ElementNotInteractableException as err:
+                break
 
         response = driver.page_source
         time.sleep(1)
@@ -228,10 +237,6 @@ def fetch_all(category="", depth=0):
         NEWS["status"] = err
         return NEWS
 
-    except Exception as err:
-        NEWS["status"] = err
-        return NEWS
-
 
 def fetch_category(category, depth=0):
     """
@@ -254,3 +259,6 @@ def fetch_category(category, depth=0):
     except Exception as err:
         NEWS["status"] = err
         return NEWS
+
+
+print(fetch_all("business", 4))
