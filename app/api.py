@@ -108,11 +108,11 @@ def fetch_all(category="", depth=0):
         while depth != 0:
             load_more_button = driver.find_element_by_id("load-more-btn")
             load_more_button.click()
-            time.sleep(5)
+            time.sleep(2)
             depth = depth - 1
 
-        time.sleep(5)
         response = driver.page_source
+        time.sleep(1)
         soup = BeautifulSoup.BeautifulSoup(response, "html.parser")
 
         """
@@ -213,12 +213,10 @@ def fetch_all(category="", depth=0):
 
     except HTTPError as err:
         NEWS["status"] = err
-        driver.quit()
         return NEWS
 
     except Exception as err:
         NEWS["status"] = err
-        driver.quit()
         return NEWS
 
 
