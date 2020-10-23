@@ -220,7 +220,7 @@ def fetch_all(category="", depth=0):
         return NEWS
 
 
-def fetch_category(category, depth=1):
+def fetch_category(category, depth=0):
     """
     This function will get the news from a specific category that the user wants to see
     This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one

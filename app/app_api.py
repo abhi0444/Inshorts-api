@@ -5,7 +5,7 @@ A lot to be done here.
 3. Electron for making it an app
 """
 
-from flask import Flask
+from flask import Flask, render_template, request
 import api
 
 app = Flask(__name__)
@@ -24,10 +24,15 @@ def news_home():
     return resp
 
 
-@app.route("/news/<category>")
+@app.route("/news/<category>", methods=["GET","POST"])
 def news(category):
-    resp = api.fetch_category(category)
-    return resp
+    if request.method == "POST":
+        depth = int(request.form["dep"])
+        resp = api.fetch_category(category, depth)
+        return render_template('depth.html', resp = resp)
+    else:
+        resp = api.fetch_category(category)
+        return render_template('depth.html',resp = resp)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
