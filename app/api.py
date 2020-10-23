@@ -15,13 +15,20 @@ It contains two functions:
     1. fetch_all(url, category)
     2. fetch_category(category)
 """
+import time
 import json
-import requests
 import bs4 as BeautifulSoup
+from selenium import webdriver
 from requests.exceptions import HTTPError
+from selenium.webdriver.chrome.options import Options
+
+chromeOptions = Options()
+chromeOptions.headless = True
+driver = webdriver.Chrome(options=chromeOptions)
 
 # URL for Inshorts {Basically the place from where all teh news is being fetched from}
 URL = "https://inshorts.com/en/read"
+
 
 # A list of all valid categories
 CATEGORIES = [
@@ -79,7 +86,7 @@ NEWS = {"status": "", "category": "", "data": []}
 # }
 
 
-def fetch_all(some_url=URL, category=""):
+def fetch_all(category="", depth=0):
     """
     This function will contain news from any and every valid url that
     has been passed to it or it will fetch the top news that made it to homepage
@@ -92,52 +99,74 @@ def fetch_all(some_url=URL, category=""):
     4. Headline (Not the complete data but the only the headline)
     """
     try:
-        response = requests.get(some_url, timeout=5, allow_redirects=True)
-        soup = BeautifulSoup.BeautifulSoup(response.text, "html.parser")
+        """
+        Using selenium we do not have to specify a timeout as that will be managed by selenium automatically.
+        """
+        url = URL + "/" + category
+        driver.get(url)
+
+        while depth != 0:
+            load_more_button = driver.find_element_by_id("load-more-btn")
+            load_more_button.click()
+            time.sleep(5)
+            depth = depth - 1
+
+        time.sleep(5)
+        response = driver.page_source
+        soup = BeautifulSoup.BeautifulSoup(response, "html.parser")
 
         """
         Any given news article is of the given sample form
         <div class="">
-            <div class="news-card z-depth-1" itemscope itemtype="http://schema.org/NewsArticle">
-                <span content="" itemscope itemprop="mainEntityOfPage" itemType="https://schema.org/WebPage" itemid="https://inshorts.com/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"></span>
-                <span itemtype="https://schema.org/Person" itemscope="itemscope" itemprop="author">
-                    <span itemprop="name" content="Nandini Sinha "></span>
-                </span>
-                <span itemprop="description" content="Maharashtra govt blocks CBI from probing cases in state without consent"></span>
-                <span itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                    <meta itemprop="url" content="https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2020/10_oct/21_wed/img_1603299666614_411.jpg?"></meta>
+            <div class="news-card z-depth-1" itemscope itemtype="">
+                <span itemprop="description" content=""></span>
+                <span itemprop="image" itemscope itemtype="">
+                    <meta itemprop="url" content=""></meta>
                     <meta itemprop="width" content="864"></meta>
                     <meta itemprop="height" content="483"></meta>
                 </span>
-                <span itemtype="https://schema.org/Organization" itemscope="itemscope" itemprop="publisher">
-                    <span itemprop="url" content="https://inshorts.com/"></span>
+                <span itemtype="" itemscope="itemscope" itemprop="publisher">
+                    <span itemprop="url" content=""></span>
                     <span itemprop="name" content="Inshorts"></span>
-                    <span itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-                    <span itemprop="url" content="https://assets.inshorts.com/inshorts/images/v1/variants/jpg/m/2018/11_nov/21_wed/img_1542823931298_497.jpg"></span>
+                    <span itemprop="logo" itemscope itemtype="">
+                    <span itemprop="url" content=""></span>
                     <meta itemprop="width" content="400"></meta>
                     <meta itemprop="height" content="60"></meta>
                     </span>
                 </span>
-                <div class="news-card-image" style= "background-image: url('https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2020/10_oct/21_wed/img_1603299666614_411.jpg?')">
+                <div class="news-card-image" style= "IMAGE HERE">
                 </div>
                 <div class="news-card-title news-right-box">
-                    <a class="clickable" onclick="ga('send', {'hitType': 'event', 'eventCategory': 'TitleOfNews', 'eventAction': 'clicked', 'eventLabel': 'Maharashtra%20govt%20blocks%20CBI%20from%20probing%20cases%20in%20state%20without%20consent)' });"  style="color:#44444d!important" href="/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288">
-                    <span itemprop="headline">Maharashtra govt blocks CBI from probing cases in state without consent</span>
+                    <a class="clickable" onclick="">
+                    <span itemprop="headline">HEADLINE HERE</span>
                     </a>
                     <div class="news-card-author-time news-card-author-time-in-title">
-                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> /
-                    <span class="time" itemprop="datePublished" content="2020-10-21T17:13:33.000Z">10:43 pm</span> on <span clas="date">21 Oct 2020,Wednesday</span>
+                    <a href="">
+                    <span class="short">short</span>
+                    </a> by <span class="author">AUTHOR HERE
+                    </span> /
+                    <span class="time" itemprop="datePublished" content="TIME">TIME</span> on 
+                    <span clas="date">DATE HERE</span>
                     </div>
                 </div>
                 <div class="news-card-content news-right-box">
-                    <div itemprop="articleBody">The Maharashtra government has withdrawn the general consent extended to CBI to probe cases in the state. CBI will now have to approach the state government for permission to carry out an investigation on a case by case basis. This comes a day after CBI registered an FIR in the TRP scam case based on a complaint filed in UP.</div>
+                    <div itemprop="articleBody">ARTICLE HERE</div>
                     <div class="news-card-author-time news-card-author-time-in-content">
-                    <a href="/prev/en/news/maharashtra-govt-blocks-cbi-from-probing-cases-in-state-without-consent-1603300413288"><span class="short">short</span></a> by <span class="author">Nandini Sinha </span> /
-                    <span class="time" itemprop="dateModified" content="2020-10-21T17:13:33.000Z" >10:43 pm</span> on <span class="date">21 Oct</span>
+                    <a href="/"><span class="short">short</span></a> by <span class="author"></span> /
+                    <span class="time" itemprop="dateModified" content="2020-10-21T17:13:33.000Z" >
+                    10:43 pm
+                    </span> on
+                    <span class="date">
+                    21 Oct
+                    </span>
                     </div>
                 </div>
                 <div class="news-card-footer news-right-box">
-                <div class="read-more">read more at <a class="source" onclick="ga('send', {'hitType': 'event', 'eventCategory': 'ReadMore', 'eventAction': 'clicked', 'eventLabel': 'vedantu.com' });" target="_blank" href="https://inshorts.com/safe_redirect?url=https%3A%2F%2Fvedantu.app.link%2Fg9mIAb41Kab&amp;inshorts_open_externally=true ">vedantu.com</a></div>
+                <div class="read-more">
+                read more at 
+                <a class="source" onclick="" href="READ MORE HERE">
+                </a>
+                </div>
                 </div>
             </div>
         </div>
@@ -154,7 +183,6 @@ def fetch_all(some_url=URL, category=""):
         """
 
         all_news_cards = soup.find_all("div", class_="news-card z-depth-1")
-
         # So for any given app using this the items would keed on appending in the News dictionary
         # thus it has been cleared on every call else the dictionary would have ben getting bigger
         # and bigger and also the items displayed on top would have just been the old ones.
@@ -181,15 +209,21 @@ def fetch_all(some_url=URL, category=""):
             News["category"] = category
             News["data"].append(data_item)
             News["status"] = "sucess"
-
+            driver.quit()
         return json.dumps(News, indent=4)  # Final return for the News
 
-    except HTTPError as err:  # Return some error in case of an error
+    except HTTPError as err:
         NEWS["status"] = err
-        return json.dumps(NEWS, indent=4)
+        driver.quit()
+        return NEWS
+
+    except Exception as err:
+        NEWS["status"] = err
+        driver.quit()
+        return NEWS
 
 
-def fetch_category(category):
+def fetch_category(category, depth=0):
     """
     This function will get the news from a specific category that the user wants to see
     This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
@@ -203,9 +237,11 @@ def fetch_category(category):
         if category not in CATEGORIES:
             raise Exception("Invalid Category")
 
-        modified_url = URL + "/" + category
-        return fetch_all(modified_url, category)
+        return fetch_all(category, depth)
 
     except Exception as err:
         NEWS["status"] = err
         return json.dumps(NEWS, indent=4)
+
+
+print(fetch_all())
