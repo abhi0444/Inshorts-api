@@ -20,13 +20,14 @@ def index():
 
 @app.route("/news")
 def news_home():
-    return api.fetch_all()
+    resp = api.fetch_all() # Direct Return is not a good idea as it will cause the serer to overload and thus fails , so first get the data and then move on
+    return resp
 
 
 @app.route("/news/<category>")
 def news(category):
-    return api.fetch_category(category)
-
+    resp = api.fetch_category(category)
+    return resp
 
 if __name__ == "__main__":
     app.run()

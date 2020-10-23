@@ -209,8 +209,7 @@ def fetch_all(category="", depth=0):
             News["category"] = category
             News["data"].append(data_item)
             News["status"] = "sucess"
-            driver.quit()
-        return json.dumps(News, indent=4)  # Final return for the News
+        return News  # Final return for the News
 
     except HTTPError as err:
         NEWS["status"] = err
@@ -223,7 +222,7 @@ def fetch_all(category="", depth=0):
         return NEWS
 
 
-def fetch_category(category, depth=0):
+def fetch_category(category, depth=1):
     """
     This function will get the news from a specific category that the user wants to see
     This must be kept in mind that news from a category can only be fetched from the website if the category is actualy a valid one
@@ -241,7 +240,4 @@ def fetch_category(category, depth=0):
 
     except Exception as err:
         NEWS["status"] = err
-        return json.dumps(NEWS, indent=4)
-
-
-print(fetch_all())
+        return NEWS
