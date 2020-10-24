@@ -1,9 +1,8 @@
-"""
-TODO A lot to be done here.
-1. Template for the start
-2. Start page
-3. Electron for making it an app
-"""
+# TODO: A lot to be done here.
+# 1. Template for the start
+# 2. Start page
+# 3. Electron for making it an app
+
 
 from flask import Flask, render_template, request
 
@@ -50,7 +49,7 @@ def news(category):
     else:
         resp = api.fetch_category(category)
 
-    return render_template("depth.html", resp=resp, category=category)
+    return render_template("depth.html", resp=resp["data"][0], category=category)
 
 
 if __name__ == "__main__":

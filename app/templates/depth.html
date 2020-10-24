@@ -10,6 +10,10 @@
         <input type="text" name = "dep" id="dep">
         <input type="submit">
     </form>
-    {{resp}}
+    {{resp['headline']}}
+    <img src = "{{resp['image_url']}}" />
+    <br>
+    {{resp['article']}}
+    <a href = "{{resp['read_more']}}" > Read More </a>
 </body>
 </html>

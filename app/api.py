@@ -18,10 +18,7 @@ It contains two functions:
 import time
 import bs4 as BeautifulSoup
 from selenium import webdriver
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-)
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -73,7 +70,6 @@ def detect_read_more(bs4tag):
     if bs4tag is None:
         return ""
     return bs4tag["href"]
-
 
 # Define a class or say a JSON wherein the data about the news fetched from
 # the server will be filled this will be common and standardized throughout the app
@@ -130,10 +126,9 @@ def fetch_all(category="", depth=0):
     driver.get(url)
     while depth != 0:
         try:
-            load_more_button = WebDriverWait(driver, 10).until(
+            WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.ID, "load-more-btn"))
-            )
-            load_more_button.click()
+            ).click()
             depth = depth - 1
         except NoSuchElementException:
             break
