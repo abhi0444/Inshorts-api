@@ -15,11 +15,10 @@ It contains two functions:
     1. fetch_all(url, category)
     2. fetch_category(category)
 """
+import time
 import bs4 as BeautifulSoup
-from requests.exceptions import HTTPError
 from selenium import webdriver
 from selenium.common.exceptions import (
-    ElementNotInteractableException,
     NoSuchElementException,
     TimeoutException,
 )
@@ -92,11 +91,11 @@ NEWS = {"status": "", "category": "", "data": []}
 
 
 def create_news(news_card):
-    '''
+    """
     This functions pulls all the required information from the
     news card and then makes a dictionary of the form as defined
     just above
-    '''
+    """
     # TODO: check if news_card has methods to access the sub-tree
     soup = BeautifulSoup.BeautifulSoup(str(news_card), "lxml")
 
@@ -127,32 +126,23 @@ def fetch_all(category="", depth=0):
     """
     # Using selenium we do not have to specify a timeout as that
     # will be managed by selenium automatically.
-
-    try:
-        url = URL + "/" + category
-        driver.get(url)
-    except HTTPError as err:
-        # TODO: Returns errors without global
-        NEWS["status"] = err
-        return NEWS
-
+    url = URL + "/" + category
+    driver.get(url)
     while depth != 0:
         try:
             load_more_button = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, "load-more-btn"))
+                EC.element_to_be_clickable((By.ID, "load-more-btn"))
             )
             load_more_button.click()
             depth = depth - 1
-        except NoSuchElementException as err:
+        except NoSuchElementException:
             break
-        except ElementNotInteractableException as err:
-            break
-        except TimeoutException as err:
+        except TimeoutException:
             break
 
+    time.sleep(1)
     response = driver.page_source
     soup = BeautifulSoup.BeautifulSoup(response, "html.parser")
-
     # Any given news article is of the given sample form
     # <div class="">
     #    <div class="news-card z-depth-1" itemscope itemtype="">

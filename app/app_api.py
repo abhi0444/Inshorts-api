@@ -50,7 +50,7 @@ def news(category):
     else:
         resp = api.fetch_category(category)
 
-    return render_template("depth.html", resp=resp)
+    return render_template("depth.html", resp=resp, category=category)
 
 
 if __name__ == "__main__":
