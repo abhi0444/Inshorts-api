@@ -1,5 +1,5 @@
 """
-A lot to be done here.
+TODO A lot to be done here.
 1. Template for the start
 2. Start page
 3. Electron for making it an app
