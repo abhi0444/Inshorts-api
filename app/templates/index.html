@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title style="text-transform: uppercase;">{{category}}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome-all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
+
+    {% block style %} {% endblock %}
+
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='assets/img/4.jpg') }}");
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-size: 100% 100%;
+        }
+        #myBtn {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        background-color: red;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 4px;
+        }
+
+        #myBtn:hover {
+        background-color: #555;
+        }
+
+    .navbar {
+        background-color:transparent;
+        width: 100%;
+      }
+      .navbar-light .navbar-nav .nav-link
+      {
+        color:white;
+      }
+      .navbar-light .navbar-nav .nav-link a:hover
+      {
+        color: blue;
+      }
+      .navbar-toggle {
+        z-index: 3;
+      }
+      
+      .navbar-default {
+        background-color: black;
+        background-image: none;
+      }
+      
+      @media screen and (min-width:768px) {
+        .navbar-brand-centered {
+          position: absolute;
+          left: 50%;
+          display: block;
+          width: 160px;
+          text-align: center;
+        }
+      }
+      
+      @media screen and (min-width:768px) {
+        .navbar > .container .navbar-brand-centered, .navbar > .container-fluid .navbar-brand-centered {
+          margin-left: -80px;
+        }
+      }
+      
+      .snip1527 {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+        color: #ffffff;
+        font-family: 'Lato', Arial, sans-serif;
+        font-size: 16px;
+        margin: 0px 1%;
+        width: 250px;
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+        display: inline-block;
+      }
+      
+      .cen 
+      {
+          display:block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 58%;
+      }
+      
+      .snip1527 * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-transition: all 0.25s ease;
+        transition: all 0.25s ease;
+      }
+      
+      .snip1527 img {
+        max-width: 100%;
+        vertical-align: top;
+        position: relative;
+      }
+      
+      .snip1527 figcaption {
+        padding: 8px 5px 8px;
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        width: 100%;
+      }
+      
+      .snip1527 figcaption:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #cbbbcc;
+        width:100%;
+        content: '';
+        /*background: -moz-linear-gradient(90deg, #700877 0%, #ff2759 100%, #ff2759 100%);*/
+        background: -webkit-linear-gradient(90deg, #292529 0%, #41292f 100%, #423d3e 100%);
+        /*background: linear-gradient(90deg, #700877 0%, #ff2759 100%, #ff2759 100%);*/
+        opacity: 0.8;
+        z-index: -1;
+      }
+      
+      .snip1527 .date {
+        background-color: #fff;
+        border-radius: 50%;
+        color: #700877;
+        font-size: 18px;
+        font-weight: 700;
+        min-height: 48px;
+        min-width: 48px;
+        padding: 10px 0;
+        position: absolute;
+        right: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        top: -25px;
+      }
+      
+      .snip1527 .date span {
+        display: block;
+        line-height: 14px;
+      }
+      
+      .snip1527 .date .month {
+        font-size: 11px;
+      }
+      
+      .snip1527 h3, .snip1527 p {
+        margin: 0;
+        padding: 0;
+      }
+      
+      .snip1527 h3 {
+        display: inline-block;
+        font-weight: 700;
+        letter-spacing: -0.4px;
+        margin-bottom: 5px;
+      }
+      
+      .snip1527 p {
+        font-size: 0.8em;
+        line-height: 1.6em;
+        margin-bottom: 0px;
+      }
+      
+      .snip1527 a {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        z-index: 1;
+      }
+      
+      .snip1527:hover img, .snip1527.hover img {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+      
+      img {
+        border-radius: 5px;
+      }
+      
+      img {
+        border-radius: 5px;
+      }
+      
+      .card.mb-4.box-shadow {
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+      }
+      
+    </style>
+      <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='assets/bootstrap/js/jquery.min.js') }}"></script>
+      {% block script %} {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-md">
+        <div class="container-fluid">
+            <div>
+                <a class="navbar-brand navbar-brand-centered" href="{{ url_for('index')}}" style="font-size:40px; margin-top:-10px; color:white; font-weight:bold;">
+                    MyNews
+                </a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news_home')}}">Top </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='national')}}">National </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='business') }}">Business </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='sports') }}">Sports </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='world')}}">World </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='politics')}}">Politics </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='entertainment')}}">Entertainment </a></li>
+
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='technology')}}">Technology </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='startup')}}">Startup </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='miscellaneous')}}">Miscellaneous </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='hatke')}}">Hatke </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='science')}}">Science </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('news', category='automobile')}}">Automobile </a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+    <section>
+        <h1 style="text-align: center; text-transform: uppercase; color: white;">{{category}}</h1>
+        <br>
+        <div class="container">
+            <div class="row">
+                {% for i in range(0,length)%}
+                <div class="col-lg-4">
+                    <div class="card mb-4 box-shadow"><img class="card-img-top w-100 d-block" src="{{resp['data'][i]['image_url']}}">
+                        <div class="card-body">
+                            <a href="{{resp['data'][i]['read_more']}}"><h4 class="card-title">{{resp['data'][i]['headline']}}</h4></a>
+                            <p class="card-text">{{resp['data'][i]['article']}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <script>
+        var mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+    </script>
+
+</body>
+
+</html>

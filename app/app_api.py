@@ -1,6 +1,6 @@
 # TODO: A lot to be done here.
-# 1. Template for the start
-# 2. Start page
+# 1. Make Navigation bar responsive
+# 2. Icons/Images for each category of news
 # 3. Electron for making it an app
 
 
@@ -19,7 +19,7 @@ def index():
     This function should give the home page which is only
     for testing and no functionality from api is used here
     """
-    return "Welcome to News and Weather app"
+    return render_template("home.html")
 
 
 @app.route("/news")
@@ -32,7 +32,8 @@ def news_home():
         api.fetch_all()
     )  # Direct Return is not a good idea as it will cause the serer to
     # overload and thus fails , so first get the data and then move on
-    return resp
+    category = "Top"
+    return render_template("index.html", resp=resp, category=category, length = len(resp['data']))
 
 
 @app.route("/news/<category>/<depth>", methods=["GET", "POST"])
@@ -43,9 +44,13 @@ def news(category,depth):
     use of the depth feature that helps in fetching
     more news
     """
-    depth = int(depth)
-    resp = api.fetch_category(category, depth)
-    return resp
+    if request.method == "POST":
+        depth = int(request.form["dep"])
+        resp = api.fetch_category(category, depth)
+    else:
+        resp = api.fetch_category(category)
+
+    return render_template("index.html", resp=resp, category=category, length = len(resp['data']))
 
 
 if __name__ == "__main__":
