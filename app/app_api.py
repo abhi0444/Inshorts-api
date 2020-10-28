@@ -35,21 +35,17 @@ def news_home():
     return resp
 
 
-@app.route("/news/<category>", methods=["GET", "POST"])
-def news(category):
+@app.route("/news/<category>/<depth>", methods=["GET", "POST"])
+def news(category,depth):
     """
     This function is also same but here category
     can be passed as well also this function makes
     use of the depth feature that helps in fetching
     more news
     """
-    if request.method == "POST":
-        depth = int(request.form["dep"])
-        resp = api.fetch_category(category, depth)
-    else:
-        resp = api.fetch_category(category)
-
-    return render_template("depth.html", resp=resp["data"][0], category=category)
+    depth = int(depth)
+    resp = api.fetch_category(category, depth)
+    return resp
 
 
 if __name__ == "__main__":
