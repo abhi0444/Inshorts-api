@@ -33,24 +33,24 @@ def news_home():
     )  # Direct Return is not a good idea as it will cause the serer to
     # overload and thus fails , so first get the data and then move on
     category = "Top"
-    return render_template("index.html", resp=resp, category=category, length = len(resp['data']))
+    return render_template(
+        "index.html", resp=resp, category=category, length=len(resp["data"])
+    )
 
 
-@app.route("/news/<category>/<depth>", methods=["GET", "POST"])
-def news(category,depth):
+@app.route("/news/<category>", methods=["GET", "POST"])
+def news(category):
     """
     This function is also same but here category
     can be passed as well also this function makes
     use of the depth feature that helps in fetching
     more news
     """
-    if request.method == "POST":
-        depth = int(request.form["dep"])
-        resp = api.fetch_category(category, depth)
-    else:
-        resp = api.fetch_category(category)
+    resp = api.fetch_category(category)
 
-    return render_template("index.html", resp=resp, category=category, length = len(resp['data']))
+    return render_template(
+        "index.html", resp=resp, category=category, length=len(resp["data"])
+    )
 
 
 if __name__ == "__main__":
