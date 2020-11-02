@@ -71,6 +71,7 @@ def detect_read_more(bs4tag):
         return ""
     return bs4tag["href"]
 
+
 # Define a class or say a JSON wherein the data about the news fetched from
 # the server will be filled this will be common and standardized throughout the app
 # Since having a class limits the working of this API thus we need to improve

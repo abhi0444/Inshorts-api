@@ -10,10 +10,9 @@ app.secret_key = "vjfubvnwiojbtg[[;[;wfhweufiwubke"
 @app.route("/")
 def index():
     """
-    This function should give the home page which is only
-    for testing and no functionality from api is used here
+    Home page for the flask app
     """
-    return "API is working"
+    return render_template("home.html")
 
 
 @app.route("/news")
@@ -26,7 +25,10 @@ def news_home():
         api.fetch_all()
     )  # Direct Return is not a good idea as it will cause the serer to
     # overload and thus fails , so first get the data and then move on
-    return resp
+    category = "Top"
+    return render_template(
+        "index.html", resp=resp, category=category, length=len(resp["data"])
+    )
 
 
 @app.route("/news/<category>", methods=["GET", "POST"])
@@ -37,20 +39,9 @@ def news(category):
     """
     resp = api.fetch_category(category)
 
-    return resp
-
-
-@app.route("/news/<category>/<depth>", methods=["GET", "POST"])
-def news_depth(category, depth):
-    """
-    This function is also same but here category
-    as well as depth can be passed. This is only
-    for the API calls this is not linked to the
-    frontend part.
-    """
-    resp = api.fetch_category(category, int(depth))
-
-    return resp
+    return render_template(
+        "index.html", resp=resp, category=category, length=len(resp["data"])
+    )
 
 
 if __name__ == "__main__":
