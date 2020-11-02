@@ -46,3 +46,5 @@ The API has 3 features or (endpoints):
           * miscellaneous
           * science
           * automobile
+## Test ##
+To make sure that the API is working try making a request to it using curl or you may use the browser as well.
