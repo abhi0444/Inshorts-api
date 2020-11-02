@@ -1,9 +1,3 @@
-# TODO: A lot to be done here.
-# 1. Make Navigation bar responsive
-# 2. Icons/Images for each category of news
-# 3. Electron for making it an app
-
-
 from flask import Flask, render_template, request
 
 import api
@@ -42,15 +36,25 @@ def news_home():
 def news(category):
     """
     This function is also same but here category
-    can be passed as well also this function makes
-    use of the depth feature that helps in fetching
-    more news
+    can be passed as well
     """
     resp = api.fetch_category(category)
 
     return render_template(
         "index.html", resp=resp, category=category, length=len(resp["data"])
     )
+
+@app.route("/news/<category>/<depth>", methods=["GET", "POST"])
+def news_depth(category, depth):
+    """
+    This function is also same but here category
+    as well as depth can be passed. This is only
+    for the API calls this is not linked to the
+    frontend part.
+    """
+    resp = api.fetch_category(category, int(depth))
+
+    return resp
 
 
 if __name__ == "__main__":
